@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía completa de lógica de programación web</title>
+<style>
+:root{--bg:#f4f5fb;--card:#fff;--txt:#222543;--sub:#667;--acc:#5b4bff;--or:#ff7a59;--ok:#12b76a;--line:#e1e3f2;--code:#1a1c33}
+@media (prefers-color-scheme:dark){:root{--bg:#14152a;--card:#1f2140;--txt:#f1f2ff;--sub:#a9acd0;--line:#33365e;--code:#0c0d1d}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:17px/1.55 "Nunito","Trebuchet MS",system-ui,sans-serif}
+.top{position:sticky;top:0;z-index:9;background:var(--bg);padding:12px 16px;border-bottom:1px solid var(--line)}
+.top div{max-width:760px;margin:auto;display:flex;align-items:center;gap:12px}
+.bar{flex:1;height:14px;background:var(--line);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--or));transition:width .6s}
+#stars{font-size:20px;white-space:nowrap}
+main{max-width:760px;margin:auto;padding:20px 16px 80px}
+h1{font-size:clamp(28px,6vw,42px);margin:10px 0 4px;line-height:1.1}
+.sub{color:var(--sub);margin:0 0 24px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:20px;margin-bottom:22px;transition:border-color .4s}
+.card.done{border-color:var(--ok)}
+.card h2{margin:0 0 4px;font-size:24px}
+.card h2 span{display:inline-block;background:var(--acc);color:#fff;border-radius:50%;width:34px;height:34px;text-align:center;line-height:34px;font-size:18px;margin-right:8px}
+.card.done h2 span{background:var(--ok)}
+.card.done h2::after{content:" ✅";font-size:20px}
+.stage{background:var(--bg);border-radius:14px;padding:16px;margin:12px 0;text-align:center;min-height:90px}
+pre{background:var(--code);color:#e8eaff;border-radius:10px;padding:12px 14px;margin:10px 0;overflow-x:auto;font:15px/1.7 Consolas,"Courier New",monospace}
+pre .on{background:#ffd166;color:#111;display:block;border-radius:4px;padding:0 6px;margin:0 -6px}
+pre b{color:#ffd166}
+button{font:inherit;font-weight:700;border:none;border-radius:12px;padding:10px 16px;margin:4px;cursor:pointer;background:var(--acc);color:#fff;box-shadow:0 3px 0 rgba(0,0,0,.25);transition:transform .1s}
+button:active{transform:translateY(3px);box-shadow:none}
+button.alt{background:var(--or)}
+button:disabled{opacity:.5;cursor:wait}
+:focus-visible{outline:3px solid #ffd166;outline-offset:2px}
+input[type=number],input[type=text]{font:inherit;padding:8px 10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--txt);width:110px}
+input[type=range]{width:min(100%,320px);accent-color:var(--acc)}
+.mission{background:color-mix(in srgb,var(--or) 14%,transparent);border-left:5px solid var(--or);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+.msg{min-height:26px;font-weight:700}
+.big{font-size:56px;line-height:1.1;display:inline-block}
+.pop{animation:pop .35s}
+@keyframes pop{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.25)}100%{transform:scale(1);opacity:1}}
+.hearts span{font-size:34px;display:inline-block;animation:pop .35s}
+.track{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.track div{aspect-ratio:1;background:var(--card);border:2px solid var(--line);border-radius:8px;display:grid;place-items:center;font-size:clamp(16px,4vw,26px)}
+.track div.cur{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 15%,transparent)}
+.machine{font-size:64px;display:inline-block}
+.shake{animation:shake .6s}
+@keyframes shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(14deg)}60%{transform:rotate(-10deg)}80%{transform:rotate(10deg)}}
+.chk{list-style:none;padding:0;margin:8px 0;text-align:left;display:inline-block}
+.chk li{padding:3px 0}.chk li.ok{color:var(--ok);font-weight:700}.chk li.ok::before{content:"✔ "}.chk li::before{content:"○ "}
+#hov{display:inline-block;padding:14px 20px;border:2px dashed var(--acc);border-radius:12px;margin:6px;transition:background .2s}
+#hov.hit{background:var(--acc);color:#fff}
+.fall{position:fixed;top:-40px;font-size:28px;z-index:99;pointer-events:none;animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+code{background:color-mix(in srgb,var(--acc) 14%,transparent);padding:1px 6px;border-radius:5px;font-size:.9em}
+.guide{margin:12px 0}
+details{border:2px solid var(--line);border-radius:12px;padding:8px 14px;margin:8px 0;background:var(--bg)}
+summary{cursor:pointer;font-weight:800}
+details[open] summary{margin-bottom:6px}
+details p{margin:6px 0}details ol,details ul{margin:6px 0;padding-left:22px}details li{margin:5px 0}
+details.how{border-color:var(--acc)}details.warn{border-color:var(--or)}
+.intro{background:var(--card);border:2px dashed var(--acc);border-radius:16px;padding:14px 18px;margin-bottom:22px}
+.intro ol{margin:6px 0 0;padding-left:22px}
+dt{font-weight:800;margin-top:10px}dd{margin:0 0 0 14px;color:var(--sub)}
+</style>
+</head>
+<body>
+<div class="top"><div><b>Tu progreso</b><div class="bar" style="flex:1"><i id="pb"></i></div><span id="stars">☆☆☆☆☆</span></div></div>
+<main>
+<h1>Aprende lógica de programación jugando 🎮</h1>
+<p class="sub">Cinco misiones cortas para entender cómo "piensa" un programa web.</p>
+<div class="intro"><b>Cómo usar esta guía</b><ol><li><b>Lee</b> el apartado "¿Qué es y para qué sirve?" para entender la idea.</li><li><b>Juega</b> con el ejemplo animado. No puedes romper nada.</li><li><b>Sigue</b> las instrucciones paso a paso para cumplir la misión.</li><li><b>Gana</b> la estrella y pasa al siguiente tema. Al final tienes un glosario para repasar.</li></ol></div>
+
+<section class="card" id="L1"><h2><span>1</span>Variables: cajas con nombre</h2>
+<p>Una variable es un espacio de la memoria con nombre, donde guardas un dato para usarlo después.</p>
+<div class="guide"><details open><summary>📖 ¿Qué es y para qué sirve?</summary><p>Imagina una caja con una etiqueta. La etiqueta es el <b>nombre</b> (<code>vidas</code>) y lo que hay dentro es el <b>valor</b> (<code>3</code>). Con <code>let</code> creas la caja y con <code>=</code> le metes un dato. Después puedes leerla o cambiarla.</p><p>Tipos de dato más comunes: <b>número</b> (<code>5</code>), <b>texto</b> (<code>"Ana"</code>, siempre entre comillas) y <b>booleano</b> (<code>true</code> o <code>false</code>).</p></details>
+<details><summary>🌐 Dónde la verás en una página web</summary><ul><li>Una tienda guarda el <code>total</code> de tu carrito.</li><li>Un juego guarda tus <code>puntos</code>.</li><li>Una red social guarda tu <code>nombreDeUsuario</code>.</li></ul></details></div>
+<div class="stage"><div class="hearts" id="hearts"></div></div>
+<pre>let vidas = <b id="vn">3</b>;</pre>
+<div><button data-d="1">vidas = vidas + 1</button><button class="alt" data-d="-1">vidas = vidas - 1</button></div>
+<div class="mission">🎯 <b>Misión:</b> deja la variable <code>vidas</code> con valor <b>5</b>.</div>
+<details class="how" open><summary>🧭 Instrucciones paso a paso</summary><ol><li>Mira el código negro: <code>let vidas = 3;</code> significa "crea una caja llamada vidas y guarda un 3".</li><li>Pulsa el botón morado para sumar una vida o el naranja para restar una.</li><li>Observa que el número del código y los corazones cambian a la vez.</li><li>Cuando <code>vidas</code> valga 5, ganas la estrella.</li></ol></details>
+<details class="warn"><summary>⚠️ Errores comunes</summary><ul><li><code>Vidas</code> y <code>vidas</code> son variables distintas: las mayúsculas importan.</li><li><code>vidas = vidas + 1</code> no es una ecuación. Significa: toma lo que hay en la caja, súmale 1 y guárdalo de nuevo.</li><li>Un texto sin comillas se confunde con el nombre de una variable.</li></ul></details></section>
+
+<section class="card" id="L2"><h2><span>2</span>Condicionales: decidir según el caso</h2>
+<p>Un condicional permite que el programa decida qué hacer según la situación.</p>
+<div class="guide"><details open><summary>📖 ¿Qué es y para qué sirve?</summary><p><code>if</code> hace una pregunta que solo se responde con verdadero o falso (la <b>condición</b>). Si es verdadera, ejecuta su bloque. Si no, el programa prueba con el siguiente <code>else if</code>, y <code>else</code> atrapa "todo lo demás". <b>Solo se ejecuta un camino.</b></p><p>Operadores para comparar: <code>&lt;</code> menor, <code>&gt;</code> mayor, <code>&gt;=</code> mayor o igual, <code>===</code> igual, <code>!==</code> distinto.</p></details>
+<details><summary>🌐 Dónde la verás en una página web</summary><ul><li>Mostrar "Contraseña incorrecta" solo si no coincide.</li><li>Dar un descuento si el carrito pasa de $500.</li><li>Mostrar el botón "Cerrar sesión" solo si ya iniciaste sesión.</li></ul></details></div>
+<div class="stage"><span class="big" id="who">🧍</span><span class="big" id="cloth">👕</span><div><b id="tv">22</b> °C</div></div>
+<input type="range" id="temp" min="0" max="40" value="22" aria-label="Temperatura">
+<pre id="c2"></pre>
+<div class="mission">🎯 <b>Misión:</b> mueve la temperatura hasta ver al personaje con <b>abrigo</b> y también con <b>gafas</b>.</div>
+<details class="how" open><summary>🧭 Instrucciones paso a paso</summary><ol><li>Arrastra el control deslizante.</li><li>Mira el código: la línea resaltada en amarillo es el camino que el programa está ejecutando.</li><li>Baja de 15 °C para activar el abrigo 🧥.</li><li>Sube a 30 °C o más para activar las gafas 😎.</li><li>Cuando hayas visto ambos casos, ganas la estrella.</li></ol></details>
+<details class="warn"><summary>⚠️ Errores comunes</summary><ul><li><code>=</code> guarda un valor y <code>===</code> compara. Confundirlos es el error número uno.</li><li>El orden importa: se revisa de arriba abajo y se detiene en la primera condición verdadera.</li><li>Con exactamente 15 °C no se cumple <code>temp &lt; 15</code>, porque 15 no es menor que 15.</li></ul></details>
+<div class="msg" id="m2"></div></section>
+
+<section class="card" id="L3"><h2><span>3</span>Bucles: repetir sin copiar y pegar</h2>
+<p>Un bucle repite una acción sin que tengas que copiarla una y otra vez.</p>
+<div class="guide"><details open><summary>📖 ¿Qué es y para qué sirve?</summary><p>El bucle <code>for</code> tiene tres partes dentro del paréntesis:</p><ul><li><code>let i = 0</code>: <b>inicio</b>, el contador empieza en 0.</li><li><code>i &lt; n</code>: <b>condición</b>, mientras sea verdadera, sigue repitiendo.</li><li><code>i++</code>: <b>paso</b>, suma 1 al contador en cada vuelta.</li></ul><p>Cada repetición se llama <b>iteración</b>.</p></details>
+<details><summary>🌐 Dónde la verás en una página web</summary><ul><li>Dibujar los 20 productos de una tienda a partir de una lista.</li><li>Revisar cada campo de un formulario para ver si está vacío.</li><li>Crear las filas de una tabla de calificaciones.</li></ul></details></div>
+<div class="stage"><div class="track" id="track"></div></div>
+<div>Vueltas: <input type="number" id="nv" min="0" max="12" value="3" aria-label="Número de vueltas"> <button id="run">▶ Ejecutar</button></div>
+<pre id="c3"></pre>
+<div class="mission">🎯 <b>Misión:</b> elige cuántas vueltas necesita el robot para <b>llegar a la bandera</b> 🚩.</div>
+<details class="how" open><summary>🧭 Instrucciones paso a paso</summary><ol><li>El robot empieza en la casilla 0 y la bandera está en la casilla 6.</li><li>Escribe en "Vueltas" cuántas veces debe repetirse <code>avanzar()</code>.</li><li>Pulsa Ejecutar y mira cómo se resalta <code>avanzar()</code> en cada vuelta.</li><li>Cada vuelta mueve al robot una casilla. Si se queda corto, sube el número; si se pasa, bájalo.</li><li>Cuando caiga justo en la bandera, ganas.</li></ol></details>
+<details class="warn"><summary>⚠️ Errores comunes</summary><ul><li><b>Bucle infinito:</b> si la condición nunca se vuelve falsa, la página se congela.</li><li>Empezar en 0 o en 1 cambia el número de vueltas por uno.</li><li><code>i &lt; 5</code> repite 5 veces desde 0; <code>i &lt;= 5</code> repite 6.</li></ul></details>
+<div class="msg" id="m3"></div></section>
+
+<section class="card" id="L4"><h2><span>4</span>Funciones: máquinas que transforman</h2>
+<p>Una función es un bloque de pasos con nombre que puedes usar todas las veces que quieras.</p>
+<div class="guide"><details open><summary>📖 ¿Qué es y para qué sirve?</summary><p>Una función <b>recibe</b> datos (llamados <b>parámetros</b>), los <b>procesa</b> y <b>devuelve</b> un resultado con <code>return</code>. Piensa en una licuadora: entran frutas, sale jugo.</p><p><b>Definir</b> y <b>llamar</b> son cosas distintas: <code>function triple(n)</code> crea la máquina; <code>triple(8)</code> la enciende. La ventaja: escribes la lógica una vez y evitas repetir código.</p></details>
+<details><summary>🌐 Dónde la verás en una página web</summary><ul><li><code>calcularTotal(precio, cantidad)</code> en una tienda.</li><li><code>validarCorreo(texto)</code> en un formulario de registro.</li><li><code>mostrarMensaje(texto)</code> para avisos en pantalla.</li></ul></details></div>
+<pre>function triple(n) {
+  return n * 3;
+}</pre>
+<div class="stage"><span class="big" id="inp">?</span> ➜ <span class="machine" id="mach">⚙️</span> ➜ <span class="big" id="res">?</span></div>
+<div>triple( <input type="number" id="fn" value="2" aria-label="Número de entrada"> ) <button id="call">Llamar</button></div>
+<div class="mission">🎯 <b>Misión:</b> llama a la función con un número para que devuelva <b>24</b>.</div>
+<details class="how" open><summary>🧭 Instrucciones paso a paso</summary><ol><li>Lee el código: <code>n</code> es el parámetro y <code>return n * 3</code> es lo que sale de la máquina.</li><li>Escribe un número dentro de <code>triple( )</code>.</li><li>Pulsa Llamar: el número entra a la máquina ⚙️ y sale el resultado.</li><li>Pista: ¿qué número multiplicado por 3 da 24? Prueba con 24 ÷ 3.</li></ol></details>
+<details class="warn"><summary>⚠️ Errores comunes</summary><ul><li>Olvidar <code>return</code>: la función no devuelve nada y obtienes <code>undefined</code>.</li><li>Definir una función y nunca llamarla: no pasa nada.</li><li>Olvidar los paréntesis al llamarla: <code>triple</code> no es lo mismo que <code>triple(8)</code>.</li></ul></details>
+<div class="msg" id="m4"></div></section>
+
+<section class="card" id="L5"><h2><span>5</span>Eventos: la página reacciona</h2>
+<p>Un evento es algo que ocurre en la página, y tu código decide cómo reaccionar.</p>
+<div class="guide"><details open><summary>📖 ¿Qué es y para qué sirve?</summary><p>Un <b>evento</b> puede ser un clic, pasar el mouse o pulsar una tecla. Con <code>addEventListener("tipo", función)</code> le dices al navegador: "cuando ocurra esto, ejecuta esta función".</p><p>Para cambiar la página, JavaScript usa el <b>DOM</b>: la página convertida en un árbol de objetos que se pueden leer y modificar. Eventos comunes: <code>click</code>, <code>mouseenter</code>, <code>input</code>, <code>keydown</code>, <code>submit</code>.</p></details>
+<details><summary>🌐 Dónde la verás en una página web</summary><ul><li>Un menú que se abre al hacer clic en el ícono.</li><li>Un formulario que avisa mientras escribes tu contraseña.</li><li>Una galería que cambia de foto con las flechas del teclado.</li></ul></details></div>
+<pre>boton.addEventListener("click", ...);
+caja.addEventListener("mouseenter", ...);
+campo.addEventListener("input", ...);</pre>
+<div class="stage"><button id="evb">Haz clic aquí</button><div id="hov">Pasa el mouse por aquí</div><div><input type="text" id="evi" placeholder="Escribe algo" aria-label="Campo de texto"></div></div>
+<div class="mission">🎯 <b>Misión:</b> dispara los tres eventos.
+<ul class="chk"><li id="e1">click</li><li id="e2">mouseenter</li><li id="e3">input</li></ul></div>
+<details class="how" open><summary>🧭 Instrucciones paso a paso</summary><ol><li>Pulsa el botón "Haz clic aquí" (evento <code>click</code>).</li><li>Pasa el mouse por la caja punteada (evento <code>mouseenter</code>).</li><li>Escribe cualquier letra en el campo de texto (evento <code>input</code>).</li><li>Cada evento que dispares se marca con ✔ en la lista. Con los tres, ganas.</li></ol></details>
+<details class="warn"><summary>⚠️ Errores comunes</summary><ul><li>El nombre del evento va entre comillas y sin "on": <code>"click"</code>, no <code>onclick</code>.</li><li>La función se pasa sin paréntesis: <code>addEventListener("click", saludar)</code>.</li><li>El elemento debe existir en la página antes de ponerle el evento.</li></ul></details></section>
+
+<section class="card" id="fin" hidden><h2>🏆 ¡Terminaste!</h2><p>Ya conoces los cinco bloques con los que se construye cualquier programa web: variables, condicionales, bucles, funciones y eventos.</p></section>
+<section class="card" id="glos"><h2>📚 Glosario y resumen</h2><dl>
+<dt>Variable</dt><dd>Caja con nombre que guarda un dato. <code>let edad = 19;</code></dd>
+<dt>Valor / tipo de dato</dt><dd>Lo que hay dentro de la caja: número, texto o booleano.</dd>
+<dt>Booleano</dt><dd>Un dato que solo puede ser <code>true</code> o <code>false</code>.</dd>
+<dt>Condición</dt><dd>Pregunta que se responde con verdadero o falso. Se usa en <code>if</code>.</dd>
+<dt>Bucle / iteración</dt><dd>Bloque que se repite; cada repetición es una iteración.</dd>
+<dt>Parámetro</dt><dd>Dato que una función recibe para trabajar.</dd>
+<dt>Función</dt><dd>Bloque de pasos con nombre. Se define una vez y se llama muchas.</dd>
+<dt>Evento</dt><dd>Algo que ocurre en la página: clic, tecla, mouse encima.</dd>
+<dt>DOM</dt><dd>La página vista como objetos que JavaScript puede cambiar.</dd></dl>
+<p><b>Resumen:</b> guardas datos en <b>variables</b>, decides con <b>condicionales</b>, repites con <b>bucles</b>, reutilizas con <b>funciones</b> y reaccionas al usuario con <b>eventos</b>.</p></section>
+</main>
+<script>
+const $=s=>document.querySelector(s),done=new Set();
+function burst(){for(let i=0;i<22;i++){const e=document.createElement('span');e.className='fall';e.textContent=['🎉','⭐','✨','🎊'][i%4];e.style.left=Math.random()*100+'vw';e.style.animationDelay=Math.random()*.5+'s';document.body.append(e);setTimeout(()=>e.remove(),2500)}}
+function win(n){if(done.has(n))return;done.add(n);$('#L'+n).classList.add('done');$('#pb').style.width=done.size*20+'%';$('#stars').textContent='⭐'.repeat(done.size)+'☆'.repeat(5-done.size);burst();if(done.size==5)$('#fin').hidden=false}
+const hl=(a,i)=>a.map((t,j)=>j==i?`<span class="on">${t}</span>`:t).join('\n');
+
+// 1 Variables
+let vidas=3;
+function r1(){$('#vn').textContent=vidas;$('#hearts').innerHTML=vidas?'<span>❤️</span>'.repeat(vidas):'<span>💔</span>';if(vidas==5)win(1)}
+document.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{vidas=Math.max(0,Math.min(8,vidas+ +b.dataset.d));r1()});r1();
+
+// 2 Condicionales
+const seen={};
+function r2(){const t=+$('#temp').value;$('#tv').textContent=t;
+const k=t<15?0:t>=30?1:2;
+$('#cloth').textContent=['🧥','😎','👕'][k];$('#cloth').classList.remove('pop');void $('#cloth').offsetWidth;$('#cloth').classList.add('pop');
+$('#c2').innerHTML=hl(['if (temp < 15) {   ropa = "abrigo";','} else if (temp >= 30) {   ropa = "gafas";','} else {   ropa = "playera";','}'],k==0?0:k==1?1:2);
+if(k<2)seen[k]=1;if(seen[0]&&seen[1]){$('#m2').textContent='¡Viste los dos casos!';win(2)}}
+$('#temp').oninput=r2;r2();
+
+// 3 Bucles
+const T=10,FLAG=6;let pos=0;
+function r3(){$('#track').innerHTML=Array.from({length:T},(_,i)=>`<div class="${i==pos?'cur':''}">${i==pos?'🤖':i==FLAG?'🚩':''}</div>`).join('')}
+function c3(i){const n=$('#nv').value||0;$('#c3').innerHTML=hl([`for (let i = 0; i < ${n}; i++) {`,'  avanzar();','}'],i)}
+$('#nv').oninput=()=>c3(-1);r3();c3(-1);
+$('#run').onclick=async()=>{const n=Math.max(0,Math.min(12,+$('#nv').value||0));$('#run').disabled=true;pos=0;r3();$('#m3').textContent='';
+for(let i=0;i<n;i++){c3(1);pos=Math.min(T-1,pos+1);r3();await new Promise(r=>setTimeout(r,380))}
+c3(-1);$('#run').disabled=false;
+if(pos==FLAG){$('#m3').textContent='🚩 ¡Llegó a la bandera!';win(3)}else $('#m3').textContent=pos<FLAG?`Se quedó corto: llegó a la casilla ${pos}. Prueba con más vueltas.`:`Se pasó: llegó a la casilla ${pos}. Prueba con menos vueltas.`}
+
+// 4 Funciones
+const triple=n=>n*3;
+$('#call').onclick=()=>{const n=+$('#fn').value;$('#inp').textContent=n;$('#res').textContent='…';const m=$('#mach');m.classList.remove('shake');void m.offsetWidth;m.classList.add('shake');
+setTimeout(()=>{const r=triple(n);$('#res').textContent=r;$('#res').classList.remove('pop');void $('#res').offsetWidth;$('#res').classList.add('pop');
+if(r==24){$('#m4').textContent='triple('+n+') devuelve 24 ✔';win(4)}else $('#m4').textContent='triple('+n+') devuelve '+r+'. Busca el que dé 24.'},600)};
+
+// 5 Eventos
+const ev=new Set();
+function hit(id){ev.add(id);$('#'+id).classList.add('ok');if(ev.size==3)win(5)}
+$('#evb').addEventListener('click',()=>hit('e1'));
+$('#hov').addEventListener('mouseenter',e=>{e.target.classList.add('hit');hit('e2')});
+$('#hov').addEventListener('mouseleave',e=>e.target.classList.remove('hit'));
+$('#evi').addEventListener('input',()=>hit('e3'));
+</script>
+</body>
+</html>
